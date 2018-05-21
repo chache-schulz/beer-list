@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="input-search">
+      <el-input placeholder="Search by Name" v-model="nameSearch" clearable>
+        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+      </el-input>
+    </div>
+
     <el-table
       :data="this.beerList"
       @sort-change="changeSort"
@@ -71,7 +77,7 @@ export default {
   name: 'beer',
   data () {
     return {
-      beers: {}
+      nameSearch: ''
     }
   },
   mounted: function () {
@@ -85,7 +91,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setOrder'
+      'setOrder',
+      'setNameSearch'
     ]),
     changeSort: function (header) {
       if (header.prop) {
@@ -101,6 +108,10 @@ export default {
     },
     previousPage: function () {
       this.$store.dispatch('getBeerList', { p: this.pagination.currentPage - 1 })
+    },
+    search: function () {
+      this.setNameSearch(this.nameSearch)
+      this.$store.dispatch('getBeerList', { p: 1 })
     }
   }
 }
@@ -113,5 +124,9 @@ export default {
 
   .pagination-buttons {
     margin-top: 1%;
+  }
+
+  .input-search {
+    width: 40%;
   }
 </style>

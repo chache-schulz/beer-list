@@ -12,7 +12,8 @@ export default {
     order: {
       field: 'name',
       sort: 'ASC'
-    }
+    },
+    nameSearch: ''
   },
   getters: {
     beerList: state => {
@@ -23,6 +24,9 @@ export default {
     },
     order: state => {
       return state.order
+    },
+    nameSearch: state => {
+      return state.nameSearch
     }
   },
   mutations: {
@@ -36,14 +40,27 @@ export default {
     },
     setOrder: (state, order) => {
       state.order = order
+    },
+    setNameSearch: (state, name) => {
+      state.nameSearch = name
     }
   },
   actions: {
     async getBeerList ({state, commit}, params) {
+      var promise
       params = params || {}
       params.order = state.order.field
       params.sort = state.order.sort
-      Service.getBeerList(params)
+
+      if (state.nameSearch) {
+        params.q = state.nameSearch
+        params.type = 'beer'
+        promise = Service.searchBeers
+      } else {
+        promise = Service.getBeerList
+      }
+
+      promise(params)
         .then((response) => {
           commit('setBeers', response.data.data)
           commit('setPagination', response.data)
