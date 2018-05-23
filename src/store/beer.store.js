@@ -8,7 +8,6 @@ export default {
       totalResults: 0
     },
     beers: [],
-    beerSelected: {},
     order: {
       field: 'name',
       sort: 'ASC'
@@ -21,12 +20,6 @@ export default {
     },
     pagination: state => {
       return state.pagination
-    },
-    order: state => {
-      return state.order
-    },
-    nameSearch: state => {
-      return state.nameSearch
     }
   },
   mutations: {
